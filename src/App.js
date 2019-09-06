@@ -47,27 +47,30 @@ class App extends React.Component{
     }
   };
 
+  omit = (obj, keyToOmit) => {
+    return Object.entries(obj).reduce(
+      (newObj, [key, value]) =>
+          key === keyToOmit ? newObj : {...newObj, [key]: value},
+      {}
+    );
+  }
+
   handleDeleteCard = (currentListId, currentCardId) => {
     console.log(currentListId, currentCardId)
-    let filteredList = this.state.lists.filter(list => list.id === currentListId)
-    let newList = [];
-    [filteredList, ...newList] = this.state.lists;
-    console.log(newList)
-    this.setState({
-      lists: newList
-    })
 
-
-
-    // const currentList = this.state.lists.filter(list => list.id === currentListId)
-    // console.log(currentList)
-    // const newArray = currentList.cardIds.filter(cardId => cardId !== currentCardId)
+    //Removes instances of the card in the lists 
+    console.log(this.state.lists);
+    const newLists = this.state.lists.map(list => ({...list, cardIds:list.cardIds.filter(cardId => cardId !== currentCardId)}))
     
-    // console.log(newArray)
+    const newCards = this.omit(this.state.allCards, currentCardId)
+    
+    console.log(newLists);
 
-
+    this.setState({
+      lists: newLists,
+      allCards: newCards
+    })
     console.log('Button clicked!')
-  
   }
 
   handleAddCard = e => {
@@ -83,21 +86,19 @@ class App extends React.Component{
   }
 
   render(){
-
-  return (
-    <main className='App'>
-      <header className="App-header">
-          <h1>Trelloyes!</h1>
-      </header>
-      <div className="App-list">
-        {this.state.lists.map(item => <List header={item.header} cardIds={item.cardIds.map(id => this.state.allCards[id])} key={item.id} onClickDelete={(cardId) => {
-          console.log(cardId)
-          this.handleDeleteCard(item.id, cardId)} 
-          }
-          />)}
-      </div>
-    </main>
-    );
+    return (
+      <main className='App'>
+        <header className="App-header">
+            <h1>Trelloyes!</h1>
+        </header>
+        <div className="App-list">
+          {this.state.lists.map(list => <List header={list.header} cardIds={list.cardIds.map(id => this.state.allCards[id])} key={list.id} onClickDelete={(cardId) => {
+            this.handleDeleteCard(list.id, cardId)} 
+            }
+            />)}
+        </div>
+      </main>
+      );
   }
 }
 
