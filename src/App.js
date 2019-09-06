@@ -49,6 +49,16 @@ class App extends React.Component{
 
   handleDeleteCard = (currentListId, currentCardId) => {
     console.log(currentListId, currentCardId)
+    let filteredList = this.state.lists.filter(list => list.id === currentListId)
+    let newList = [];
+    [filteredList, ...newList] = this.state.lists;
+    console.log(newList)
+    this.setState({
+      lists: newList
+    })
+
+
+
     // const currentList = this.state.lists.filter(list => list.id === currentListId)
     // console.log(currentList)
     // const newArray = currentList.cardIds.filter(cardId => cardId !== currentCardId)

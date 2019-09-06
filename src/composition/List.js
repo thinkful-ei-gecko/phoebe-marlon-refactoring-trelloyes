@@ -9,9 +9,10 @@ function List(props) {
           <h2>{props.header}</h2>
         </header>
           <div className="List-cards">
-          {props.cardIds.map(obj => <Card title={obj.title} content={obj.content} key={obj.id} handleDeleteCard={() => {
-            props.onDeleteCard(obj.id)
-            }}  /> )}
+          {props.cardIds.map(obj => <Card title={obj.title} content={obj.content} key={obj.id} onClickDelete={() => {
+            props.onClickDelete(obj.id)
+            }
+           }  /> )}
         </div>
       </section>
   );
