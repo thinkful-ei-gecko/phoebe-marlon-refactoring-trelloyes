@@ -48,12 +48,16 @@ class App extends React.Component{
   };
 
   handleDeleteCard = (currentListId, currentCardId) => {
-    const currentList = this.state.lists.filter(list => list.id === currentListId)
-    currentList.cardIds.filter(cardId => cardId !== currentCardId)
+    console.log(currentListId, currentCardId)
+    // const currentList = this.state.lists.filter(list => list.id === currentListId)
+    // console.log(currentList)
+    // const newArray = currentList.cardIds.filter(cardId => cardId !== currentCardId)
+    
+    // console.log(newArray)
+
+
     console.log('Button clicked!')
-    this.setState({
-      lists: {...lists}
-    })
+  
   }
 
   handleAddCard = e => {
@@ -67,7 +71,7 @@ class App extends React.Component{
       }
     }
   }
-  
+
   render(){
 
   return (
@@ -76,7 +80,11 @@ class App extends React.Component{
           <h1>Trelloyes!</h1>
       </header>
       <div className="App-list">
-        {this.state.lists.map(item => <List header={item.header} cardIds={item.cardIds.map(id => this.state.allCards[id])} key={item.id} handleDeleteCard={(id, cardId) => this.handleDeleteCard(id, cardId)} />)}
+        {this.state.lists.map(item => <List header={item.header} cardIds={item.cardIds.map(id => this.state.allCards[id])} key={item.id} onClickDelete={(cardId) => {
+          console.log(cardId)
+          this.handleDeleteCard(item.id, cardId)} 
+          }
+          />)}
       </div>
     </main>
     );

@@ -9,7 +9,9 @@ function List(props) {
           <h2>{props.header}</h2>
         </header>
           <div className="List-cards">
-          {props.cardIds.map(obj => <Card title={obj.title} content={obj.content} key={obj.id} handleDeleteCard={(id, cardId) => props.handleDeleteCard(id, cardId)}  /> )}
+          {props.cardIds.map(obj => <Card title={obj.title} content={obj.content} key={obj.id} handleDeleteCard={() => {
+            props.onDeleteCard(obj.id)
+            }}  /> )}
         </div>
       </section>
   );
