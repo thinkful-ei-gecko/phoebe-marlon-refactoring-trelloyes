@@ -56,24 +56,17 @@ class App extends React.Component{
   }
 
   handleDeleteCard = (currentListId, currentCardId) => {
-    console.log(currentListId, currentCardId)
-
     //Removes instances of the card in the lists 
-    console.log(this.state.lists);
     const newLists = this.state.lists.map(list => ({...list, cardIds:list.cardIds.filter(cardId => cardId !== currentCardId)}))
-    
     const newCards = this.omit(this.state.allCards, currentCardId)
     
-    console.log(newLists);
-
     this.setState({
       lists: newLists,
       allCards: newCards
     })
-    console.log('Button clicked!')
   }
 
-  handleAddCard = e => {
+  handleAddCard = (listId) => {
     const newRandomCard = () => {
       const id = Math.random().toString(36).substring(2, 4)
         + Math.random().toString(36).substring(2, 4);
@@ -83,6 +76,24 @@ class App extends React.Component{
         content: 'lorem ipsum',
       }
     }
+    let newCard = newRandomCard();
+
+    let newLists = this.state.lists.map(list => {
+      if (list.id === listId) {
+        return {
+          ...list, 
+          cardIds: [...list.cardIds, newCard.id]
+        };
+      }
+      return list;
+    })
+
+    let oldCards = this.state.allCards;
+
+    this.setState({
+      lists: newLists,
+      allCards: {...oldCards, [newCard.id]: newCard}
+    })
   }
 
   render(){
@@ -92,10 +103,18 @@ class App extends React.Component{
             <h1>Trelloyes!</h1>
         </header>
         <div className="App-list">
-          {this.state.lists.map(list => <List header={list.header} cardIds={list.cardIds.map(id => this.state.allCards[id])} key={list.id} onClickDelete={(cardId) => {
-            this.handleDeleteCard(list.id, cardId)} 
-            }
-            />)}
+          {this.state.lists.map(list => {
+            return (
+              <List 
+                header={list.header} 
+                id={list.id}
+                key={list.id} 
+                cardIds={list.cardIds.map(id => this.state.allCards[id])} 
+                onClickDelete={(cardId) => {this.handleDeleteCard(list.id, cardId)}} 
+                onClickNew={this.handleAddCard}
+              />
+            )
+          })}
         </div>
       </main>
       );
